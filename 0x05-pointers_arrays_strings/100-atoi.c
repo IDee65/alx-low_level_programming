@@ -1,46 +1,47 @@
 #include "main.h"
-#include "2-strlen.c"
 
 /**
- * _atoi - converts string to integer
- * @s: string to convert
+ * _isdigit - Check if character is digit
+ * @c: The character to check
  *
- * Return: returns integer value
+ * Return: 1 if character is digit, 0 if otherwise
+ */
+static int _isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+/**
+ * _atoi - Convert string to int
+ * The number in the string can be preceded by an infinite number of characters
+ * Take into account all the - and + signs before the number
+ * If there are no numbers in the string, the function returns 0
+ * @s: pointer to string
+ *
+ * Return: Converted integer
  */
 int _atoi(char *s)
 {
-	int i;
-	int np = 0;
-	int c;
-	int d = 1;
-	int num = 0;
+	char c;
+	int sign = 1;
+	unsigned int n = 0;
+	int num_found = 0;
 
-	for (i = 0; i < _strlen(s); i++)
+	while ((c = *s++) != '\0')
 	{
-		if (!(s[i] >= '0' && s[i] <= '9') && c > 0)
+		if (!_isdigit(c) && num_found)
 			break;
-		if (s[i] == '-')
-			np--;
-		if (s[i] == '+')
-			np++;
-		if (s[i] >= '0' && s[i] <= '9')
+
+		if (c == '-')
+			sign *= -1;
+
+		if (_isdigit(c))
 		{
-			c++;
+			num_found = 1;
+			n *= 10;
+			n += c - '0';
 		}
 	}
-	while (c > 0)
-	{
-		num += ((s[i - 1] - '0') * d);
-		i--;
-		c--;
-		d *= 10;
-	}
-	if (np >= 0)
-	{
-		num *= 1;
-	} else
-	{
-		num *= -1;
-	}
-	return (num);
+
+	return ((int)(n * sign));
 }
